@@ -1,0 +1,28 @@
+services:
+  app:
+    build: .
+    restart: always
+    command: python app.py
+    volumes:
+      - 'logs:/opt/qr_code/logs:rw'
+#      - 'static:/opt/qr_code/static:rw'
+      - 'storages:/opt/qr_code/storages:rw'
+      - 'images:/opt/qr_code/images:rw'
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    networks:
+      - default
+
+networks:
+  default:
+    external:
+      name: qr_code_net
+
+volumes:
+  app-data:
+  logs:
+#  static:
+  storages:
+  images:

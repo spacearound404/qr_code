@@ -28,24 +28,30 @@ Transaction.set_session(storage.session)
 
 
 @app.route("/")
-def index(ngrok_domain_charge=None, ngrok_domain_check=None, img_path=None):
-    screenshot = "qr_code.jpg"
-    endpoint = '/charge'
+def index(domain_charge=None, domain_check=None, img_path=None, polygon_logo_path=None):
+    screenshot = 'qr_code.jpg'
+    polygon_logo = 'polygon_logo.png'
+    charge_endpoint = '/charge'
+    check_endpoint = '/check'
 
     full_filename = os.path.join(app.config['UPLOAD_FOLDER'], f'{screenshot}')
+    full_polygonlogo = os.path.join(app.config['UPLOAD_FOLDER'], f'{polygon_logo}')
 
-    return render_template('index.html', ngrok_domain_charge=f"{config.NGROK_DOMAIN}{endpoint}",
-                           ngrok_domain_check=f"{config.NGROK_DOMAIN}{endpoint}", img_path=full_filename)
+    return render_template('index.html',
+                           domain_charge=f"{config.DOMAIN}{charge_endpoint}",
+                           domain_check=f"{config.DOMAIN}{check_endpoint}",
+                           img_path=full_filename,
+                           polygon_logo_path=full_polygonlogo)
 
 
 @app.route("/charge/success")
-def success(ngrok_domain=None):
-    return render_template('success.html', ngrok_domain=config.NGROK_DOMAIN)
+def success(domain=None):
+    return render_template('success.html', domain=config.DOMAIN)
 
 
 @app.route("/charge/cancel")
-def cancel(ngrok_domain=None):
-    return render_template('cancel.html', ngrok_domain=config.NGROK_DOMAIN)
+def cancel(domain=None):
+    return render_template('cancel.html', domain=config.DOMAIN)
 
 
 # charge images
@@ -77,8 +83,8 @@ def checkout():
             "currency": config.DEFAULT_CURRENCY
         },
         "pricing_type": config.PRICING_TYPE,
-        "redirect_url": f"{config.NGROK_DOMAIN}{config.CHARGE_SUCCESS_ENDPOINT}",
-        "cancel_url": f"{config.NGROK_DOMAIN}{config.CHARGE_CANCEL_ENDPOINT}"
+        "redirect_url": f"{config.DOMAIN}{config.CHARGE_SUCCESS_ENDPOINT}",
+        "cancel_url": f"{config.DOMAIN}{config.CHARGE_CANCEL_ENDPOINT}"
     }
 
     charge = client.charge.create(**charge_info)
@@ -120,6 +126,8 @@ def checkout():
 # check email's percentage
 @app.route('/check', methods=['POST'])
 def check():
+    logging.info('hello')
+    logging.info(dir(request.form))
     email = request.form['email']
     address = request.form['address']
 

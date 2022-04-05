@@ -16,8 +16,8 @@ CLEAR_LOGS = False
 HOST = '0.0.0.0'
 PORT = 8000
 
-# ngrok config
-NGROK_DOMAIN = ""
+# domain config
+DOMAIN = "http://0.0.0.0:8000"
 
 # email config
 EMAIL_USER = ""
@@ -36,7 +36,7 @@ EMAIL_BODY_FAILED = f'''
         <div class=WordSection1>
             <p class=MsoNormal><span lang=EN-US>Something went wrong at the time of payment</span></p>
             <p class=MsoNormal>&nbsp;</p>
-            <a href="{NGROK_DOMAIN}">Try again</a>
+            <a href="{DOMAIN}">Try again</a>
             <p class=MsoNormal>&nbsp;</p>
             <p class=MsoNormal>© QR Code 2021</p>
         </div>
@@ -44,7 +44,7 @@ EMAIL_BODY_FAILED = f'''
 </html>
 '''
 
-SQLITE_PATH = 'sqlite:////home/stephen/db1'
+SQLITE_PATH = 'sqlite:///storages/qr_code.db'
 
 # display in web page
 QRCODE_IMG_PATH = './static/img/qr_code.jpg'

@@ -1,3 +1,4 @@
+import config
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker, declarative_base
 from sqlalchemy import (
@@ -69,7 +70,7 @@ class ImageTable(Base):
 class StorageORM:
     def __init__(self):
         # create connection
-        self.engine = create_engine('sqlite:///test.db')
+        self.engine = create_engine(config.SQLITE_PATH)
 
         # create tables
         Base.metadata.create_all(self.engine)

@@ -10,15 +10,20 @@
 
     <title>QR Code</title>
   </head>
-  <body style="overflow: hidden;">
+  <body style="overflow-y: scroll;overflow-x: hidden; text-align: center;">
     <form style="width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
       <div style="text-align: center;">
-        <img class="qr-code-img" src="{{ img_path }}" style="padding: 0.3em; background: black; width: 100%;" />
+        <img class="qr-code-img" src="{{ img_path }}" style="padding: 0.3em; background: black; width: 100%; pointer-events: none;" />
         <h4 class="percentage" style="margin-top: 2vw; margin-bottom: 2vh;font-size: 2.3vh;"></h4>
         <div class="form-floating mb-3" style="text-align: left;">
           <input type="email" class="form-control email" id="floatingInput" placeholder="name@example.com">
           <label for="floatingInput">Email address</label>
           <div id="emailHelp" class="form-text" style="text-align: center;">We'll never share your email with anyone else.</div>
+        </div>
+        <div class="form-floating mb-3" style="text-align: left;">
+          <img class="polygon-logo" src="{{ polygon_logo_path }}" style="padding: 0.3em; background: white; width: 10%;position: absolute;right: 4%;top: 20%;pointer-events: none;" />
+          <input type="address" class="form-control address" id="floatingInput2" placeholder="name@example.com" style="padding-right: 16%;">
+          <label for="floatingInput">Polygon address</label>
         </div>
         <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
           <div class="btn-group" role="group" aria-label="First group">
@@ -46,7 +51,7 @@
         </div>
       </div>
     </form>
-    <span style="position: absolute;bottom: 2vh;width: 100vw;text-align: center;">© QR Code 2021</span>
+    <span style="padding-bottom: 1em;">© QR Code 2022</span>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script>
@@ -67,7 +72,8 @@
 
       let buy = () => {
         let count = Number(document.querySelector(".input-count").value),
-            email = document.querySelector(".email").value;
+            email = document.querySelector(".email").value,
+            address = document.querySelector(".address").value;
 
         document.querySelector(".buy").innerHTML = '<div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>';
 
@@ -91,13 +97,24 @@
           document.querySelector(".input-count").style["border"] = "1px solid #ced4da";
         };
 
+        if ((address.length < 40) || (address.length > 42)) {
+          document.querySelector(".buy").innerHTML = "Buy";
+          document.querySelector(".percentage").innerHTML = "<span style='color: red; font-weight: bold;'>Invalid Polygon address</span>";
+          document.querySelector(".address").style["border-color"] = "red";
+          return;
+        } else {
+          document.querySelector(".percentage").innerHTML = "";
+          document.querySelector(".address").style["border"] = "1px solid #ced4da";
+        }
+
         document.querySelector(".email").style["border"] = "1px solid #ced4da";
+        document.querySelector(".address").style["border"] = "1px solid #ced4da";
         
 
         $.ajax({ 
-          url: '{{ ngrok_domain_charge }}',
+          url: '{{ domain_charge }}',
           method: "POST",
-          data: {"email": email, "count": count},
+          data: {"email": email, "count": count, "address": address},
           success: function(data) {
             if (typeof data.error !== 'undefined') {
               if (data.error == "zero_image") {
@@ -123,34 +140,46 @@
 
       let check = () => {
 
-        // document.querySelector(".qr-code-img").src = "";
         document.querySelector(".percentage").innerHTML = "";
-        let email = document.querySelector(".email").value;
-        if (email.length == 0) return;
+        let email = document.querySelector(".email").value,
+            address = document.querySelector(".address").value;
 
+        if ((email.length == 0) && (address.length == 0)) {
+          return;
+        };
         document.querySelector(".btn-light").innerHTML = '<div class="spinner-border text-dark" role="status"><span class="visually-hidden">Loading...</span></div>';
 
+        console.log(address);
+
         
-        if (!validate()) {
+        if ((email.length != 0) && (!validate())) {
           document.querySelector(".btn-light").innerHTML = "Check";
           document.querySelector(".email").style["border-color"] = "red";
           document.querySelector(".percentage").innerHTML = "<span style='color: red; font-weight: bold;'>Incorrect email format</span>";
           return;
-        }
+        };
+
+        if ((address.length != 0) && ((address.length < 40) || (address.length > 42))) {
+          document.querySelector(".btn-light").innerHTML = "Check";
+          document.querySelector(".address").style["border-color"] = "red";
+          document.querySelector(".percentage").innerHTML = "<span style='color: red; font-weight: bold;'>Invalid Polygon address</span>";
+          return;
+        };
+
 
         document.querySelector(".email").style["border"] = "1px solid #ced4da";
+        document.querySelector(".address").style["border"] = "1px solid #ced4da";
         
         $.ajax({ 
-          url: '{{ ngrok_domain_check }}',
+          url: '{{ domain_check }}',
           method: "POST",
-          data: {"email": email},
+          data: {"email": email, "address": address, "count": 0},
           success: function(data) {
             // display percentage
             
             if (data.result == "user_doesnt_exist") {
               // display error
-              document.querySelector(".percentage").innerHTML = "<span style='color: red; font-weight: bold;'>Email doesn't exist</span>";
-              document.querySelector(".email").style["border-color"] = "red";
+              document.querySelector(".percentage").innerHTML = "<span style='color: red; font-weight: bold;'>User doesn't exist</span>";
               document.querySelector(".btn-light").innerHTML = "Check";
             } else {             
               let percentage = data.result;

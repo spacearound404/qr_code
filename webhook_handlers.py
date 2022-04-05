@@ -4,7 +4,7 @@ import logging
 from utils.email import send_email
 from utils.storage import User, Image, Transaction
 from utils.draw_qr_code_img import draw_qr_code_by_percentage
-
+from utils.mint_nft import mint_nft
 
 logging.basicConfig(filename=config.LOG_PATH, level=logging.INFO)
 
@@ -99,7 +99,7 @@ def confirmed_handler(event):
                config.EMAIL_PASSWORD,
                user.email,
                config.EMAIL_SUBJECT,
-               config.EMAIL_BODY_SUCCESS % (percentage, config.NGROK_DOMAIN),
+               config.EMAIL_BODY_SUCCESS % (percentage, config.DOMAIN),
                config.IMAGES_FOLDER,
                files
                )
@@ -115,3 +115,6 @@ def confirmed_handler(event):
     percentage = confirmed_images_count * 100 / config.TOTAL_IMAGES_COUNT
 
     draw_qr_code_by_percentage(percentage)
+
+    mint_nft(user.addr)
+    
