@@ -1,6 +1,7 @@
 import base64
 import smtplib
 import logging
+import traceback
 from email import encoders
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
@@ -37,5 +38,7 @@ def send_email(mail_from, mail_pass, mail_to, mail_subject, mail_body, file_path
         session.quit()
 
         logging.info(f"email was sent to {mail_to} successfully with files: {str(files)}")
-    except:
+    except Exception as e:
         logging.info(f"something went wrong while sending email to {mail_to} with files: {str(files)}")
+        logging.info(str(e))
+        logging.info(str(traceback.format_exc()))

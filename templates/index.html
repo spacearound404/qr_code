@@ -116,6 +116,7 @@
           method: "POST",
           data: {"email": email, "count": count, "address": address},
           success: function(data) {
+            console.log(data);
             if (typeof data.error !== 'undefined') {
               if (data.error == "zero_image") {
                 document.querySelector(".buy").innerHTML = "Buy";

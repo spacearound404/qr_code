@@ -1,4 +1,5 @@
 import config
+import const
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker, declarative_base
 from sqlalchemy import (
@@ -163,7 +164,7 @@ class Transaction:
             if user_id != -1:
                 q = q.filter_by(user_id=user_id)
 
-            q.filter_by(status=CONFIRMED_COINBASE_STATUS)
+            q.filter_by(status=const.CONFIRMED_COINBASE_STATUS)
 
             if user_id != -1:
                 q = q.group_by(TransactionTable.user_id)

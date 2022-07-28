@@ -66,6 +66,11 @@ def confirmed_handler(event):
         logging.info(f"couldn't find transaction by charge_id, event info: {event}")
         return 'success', 200
 
+    if event.type == const.CONFIRMED_CHARGE_EVENT:
+        return 'success', 200
+
+    print(event.type)
+
     # get recipent's email by user id
     user = User.get(by='id', value=transaction.user_id)
 
@@ -114,7 +119,10 @@ def confirmed_handler(event):
 
     percentage = confirmed_images_count * 100 / config.TOTAL_IMAGES_COUNT
 
+    logging.info(f"Starting rendering...")
     draw_qr_code_by_percentage(percentage)
+    logging.info(f"Successful rendering")
 
+    logging.info(f"Starting minting...")
     mint_nft(user.addr)
-    
+    logging.info(f"Successful minting")

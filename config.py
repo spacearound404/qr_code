@@ -1,13 +1,13 @@
 # coinbase config
-API_KEY = ""
-WEBHOOK_SECRET = ""
+API_KEY = '98f79ed7-6a39-4b1f-bf0f-d4fec9d81893'
+WEBHOOK_SECRET = 'a13521ed-aee2-4ac3-bbfb-8cc5511c57b4'
 
 # database config
-NAME_DB = ""
+NAME_DB = ''
 CLEAR_DB = False
 
 # images config
-IMAGES_FOLDER = ""
+IMAGES_FOLDER = '/opt/qr_code/smartcontracts/images_test'
 
 # logs config
 CLEAR_LOGS = False
@@ -17,12 +17,12 @@ HOST = '0.0.0.0'
 PORT = 8000
 
 # domain config
-DOMAIN = "http://0.0.0.0:8000"
+DOMAIN = 'https://beb7-77-108-97-164.ngrok.io'
 
 # email config
-EMAIL_USER = ""
-EMAIL_PASSWORD = ""
-EMAIL_SUBJECT = "QR Code Event"
+EMAIL_USER = 'malevichtwentyfirst@gmail.com'
+EMAIL_PASSWORD = 'Ricardoflexer69'
+EMAIL_SUBJECT = 'QR Code Event'
 EMAIL_BODY_SUCCESS = f'''
 '''
 
@@ -44,7 +44,7 @@ EMAIL_BODY_FAILED = f'''
 </html>
 '''
 
-SQLITE_PATH = 'sqlite:///storages/qr_code.db'
+SQLITE_PATH = 'sqlite:///storages/qr_code.db?check_same_thread=False'
 
 # display in web page
 QRCODE_IMG_PATH = './static/img/qr_code.jpg'

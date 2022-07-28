@@ -20,13 +20,13 @@ function getAccount() {
 
 function getContract(contractName, hre) {
   const account = getAccount();
-  return getContractAt(hre, contractName, "0x716E9847e0dA39fCb187F32C7fFB81B87384175c", account);
+  return getContractAt(hre, contractName, "0x98Ba15e2378Bf9927d0ed58bB86442a3b0f3481E", account);
 }
 
-task("mint", "Mints from the QRCode contract")
+task("mint", "Mints from the TESTQC9 contract")
 .addParam("address", "The address to receive a token")
 .setAction(async function (taskArguments, hre) {
-    const contract = await getContract("QRCode", hre);
+    const contract = await getContract("TESTQC9", hre);
     const transactionResponse = await contract.mintTo(taskArguments.address, {
         gasLimit: 500_000,
     });
@@ -36,7 +36,7 @@ task("mint", "Mints from the QRCode contract")
 task("set-base-token-uri", "Sets the base token URI for the deployed smart contract")
 .addParam("baseUrl", "The base of the tokenURI endpoint to set")
 .setAction(async function (taskArguments, hre) {
-    const contract = await getContract("QRCode", hre);
+    const contract = await getContract("TESTQC9", hre);
     const transactionResponse = await contract.setBaseTokenURI(taskArguments.baseUrl, {
         gasLimit: 500_000,
     });
@@ -47,7 +47,7 @@ task("set-base-token-uri", "Sets the base token URI for the deployed smart contr
 task("token-uri", "Fetches the token metadata for the given token ID")
 .addParam("tokenId", "The tokenID to fetch metadata for")
 .setAction(async function (taskArguments, hre) {
-    const contract = await getContract("QRCode", hre);
+    const contract = await getContract("TESTQC9", hre);
     const response = await contract.tokenURI(taskArguments.tokenId, {
         gasLimit: 500_000,
     });

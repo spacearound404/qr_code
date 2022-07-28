@@ -9,11 +9,14 @@ RUN apk add zlib-dev jpeg-dev gcc musl-dev
 RUN python3 -m pip install -r /opt/qr_code/requirements.txt
 
 COPY . /opt/qr_code/
-WORKDIR /opt/qr_code
+WORKDIR /opt/qr_code/smartcontracts
 
 RUN apk add --update nodejs npm
 RUN npm i -g npx
-RUN npm install
+
+RUN npm install package.json
+
+WORKDIR /opt/qr_code
 
 ENV FLASK_APP=qr_code
 

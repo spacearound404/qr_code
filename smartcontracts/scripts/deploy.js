@@ -7,7 +7,7 @@ async function main() {
     console.log(`Account balance: ${(await deployer.getBalance()).toString()}`);
 
     // Fetch the compiled contract using ethers.js
-    const QRCodeContract = await ethers.getContractFactory("QRCode");
+    const QRCodeContract = await ethers.getContractFactory("TESTQC9");
     // calling deploy() will return an async Promise that we can await on 
     const contract = await QRCodeContract.deploy();
 

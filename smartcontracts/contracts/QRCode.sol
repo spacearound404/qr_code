@@ -3,24 +3,21 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract QRCode is ERC721 {
+contract TESTQC9 is ERC721 {
   using Counters for Counters.Counter;
 
   Counters.Counter private currentTokenId;
 
-  address public owner;
-
   /// @dev Base token URI used as a prefix by tokenURI().
   string public baseTokenURI;
 
-  constructor() ERC721("SQR", "SQR") {
-    owner = msg.sender;
+  constructor() ERC721("TESTQC9", "TESTQC9") {
     baseTokenURI = "";
   }
 
   function mintTo(address recipient) public returns (uint256) {
-    require(msg.sender == owner, "Permission denied.");
     currentTokenId.increment();
     uint256 newItemId = currentTokenId.current();
     _safeMint(recipient, newItemId);
@@ -29,13 +26,11 @@ contract QRCode is ERC721 {
 
   /// @dev Returns an URI for a given token ID
   function _baseURI() internal view virtual override returns (string memory) {
-    require(msg.sender == owner, "Permission denied.");
     return baseTokenURI;
   }
 
   /// @dev Sets the base token URI prefix.
   function setBaseTokenURI(string memory _baseTokenURI) public {
-    require(msg.sender == owner, "Permission denied.");
     baseTokenURI = _baseTokenURI;
   }
 }

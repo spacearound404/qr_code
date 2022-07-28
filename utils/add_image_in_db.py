@@ -1,28 +1,20 @@
 import os
-import random
 import config
-import sqlite3
 
-conn = sqlite3.connect(config.NAME_DB, check_same_thread=False)
-cursor = conn.cursor()
 
-cursor.execute("""CREATE TABLE IF NOT EXISTS 'images' (
-	'id'	INTEGER,
-	'file_name'	TEXT UNIQUE,
-	'is_sent'	INTEGER,
-	PRIMARY KEY('id' AUTOINCREMENT)
-);""")
+def set_images_path(Image):
+    images_is_sent_false = Image.count(is_sent=False)
+    images_is_sent_true = Image.count(is_sent=True)
 
-files = os.listdir(config.IMAGES_FOLDER)
+    if (images_is_sent_false + images_is_sent_true) != 0:
+        return None
 
-for file in files:
-    new_file_name = str(random.randint(1000, 9999)) + "-" + str(random.randint(1000, 9999)) + "-" + str(random.randint(1000, 9999)) + "-" + str(random.randint(1000, 9999)) + ".jpg"
-    os.rename(config.IMAGES_FOLDER + file, config.IMAGES_FOLDER + new_file_name)
+    images_file = os.listdir(config.IMAGES_FOLDER)
 
-    cursor.execute("INSERT INTO images(file_name, is_sent) VALUES(?, ?);", (new_file_name, 0))
-    conn.commit()
+    for image_file in images_file:
+        Image.add(file_name=f'/{image_file}', is_sent=False)
 
-cursor.execute("SELECT * FROM images;")
-res = cursor.fetchall()
 
-print(res)
+
+
+
